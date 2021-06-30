@@ -6,7 +6,7 @@ https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl
 
 ```
 PROJECT_DIR="/path/to/WebXR"
-cd ${PROJECT_DIR}
+cd "${PROJECT_DIR}"
 mkdir -p nginx/ssl/certs
 mkdir -p nginx/ssl/private
 
@@ -28,7 +28,7 @@ Adapt the value for the "servername" parameters in the /nginx/default.conf to ma
 ```sh
 
 PROJECT_DIR="/path/to/WebXR"
-cd ${PROJECT_DIR}
+cd "${PROJECT_DIR}"
 
 # docker run
 docker run --name WebXR \

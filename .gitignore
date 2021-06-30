@@ -1,2 +1,3 @@
 nginx/ssl
-
+html/node_modules
+html/.idea
