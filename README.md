@@ -32,6 +32,8 @@ cd "${HTML_DIR}"
 
 npm install aframe
 npm install @types/aframe
+npm install typescript --save-dev
+npx tsc --init --rootDir scripts --outDir build --esModuleInterop --resolveJsonModule --lib es6,dom --module commonjs --allowJs true --noImplicitAny true
 
 ````
 
