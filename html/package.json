@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@types/aframe": "^1.0.3",
+    "aframe": "^1.2.0"
+  }
+}
