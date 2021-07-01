@@ -5,7 +5,7 @@
     <script src="node_modules/aframe/dist/aframe.js"></script>
 
     <!-- Own scripts -->
-    <script src="build/grid.js"></script>
+    <script type="module" src="dist/bundle.js"></script>
 </head>
 <body>
 <a-scene>
@@ -17,7 +17,7 @@
 
     <!-- Walls -->
 
-    <a-plane position="-25 0 0" rotation="0 90 0" width="50" height="5" color="#000000" comp-grid></a-plane>
+    <a-plane position="-25 0 0" rotation="0 90 0" width="50" height="5" color="#000000" grid-component></a-plane>
 
 
     <a-sky color="#ECECEC"></a-sky>
