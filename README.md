@@ -30,15 +30,7 @@ Adapt the value for the "servername" parameters in the /nginx/default.conf to ma
 ## NPM Modules
 
 ```sh
-
-HTML_DIR="/path/to/WebXR/html"
-cd "${HTML_DIR}"
-
-npm install aframe
-npm install @types/aframe
-npm install typescript --save-dev
-npx tsc --init --rootDir scripts --outDir build --esModuleInterop --resolveJsonModule --lib es6,dom --module commonjs --allowJs true --noImplicitAny true
-
+npm install
 ````
 
 ## Deployment
@@ -54,6 +46,6 @@ docker run --name WebXR \
     -v ${PWD}/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro \
     -v ${PWD}/nginx/snippets:/etc/nginx/snippets \
     -v ${PWD}/nginx/ssl:/etc/ssl \
-    -v ${PWD}/html:/usr/share/nginx/html:ro \
+    -v ${PWD}/dist:/usr/share/nginx/html:ro \
     -d nginx
 ```
