@@ -33,19 +33,10 @@ Adapt the value for the "servername" parameters in the /nginx/default.conf to ma
 npm install
 ````
 
-## Deployment
+## Docker Deployment
 
 ```sh
-
 PROJECT_DIR="/path/to/WebXR"
 cd "${PROJECT_DIR}"
-
-# docker run
-docker run --name WebXR \
-    -p 8001:443 \
-    -v ${PWD}/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro \
-    -v ${PWD}/nginx/snippets:/etc/nginx/snippets \
-    -v ${PWD}/nginx/ssl:/etc/ssl \
-    -v ${PWD}/dist:/usr/share/nginx/html:ro \
-    -d nginx
+docker-compose up -d
 ```
