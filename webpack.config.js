@@ -1,11 +1,22 @@
+const fs = require('fs');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const srcDir = 'src';
+
+function getEntries() {
+    const entries = {};
+    fs.readdirSync(srcDir).forEach(file => {
+        if (path.extname(file) === '.ts') {
+            const nameWoExt = file.split('.').slice(0, -1).join('.');
+            entries[nameWoExt] = `./${path.join(srcDir, file)}`;
+        }
+    });
+
+    return entries;
+}
 
 module.exports = {
-    entry: {
-        'index': './src/index.ts',
-        'print': './src/print.ts'
-    },
+    entry: getEntries(),
     mode: 'development',
     module: {
         rules: [

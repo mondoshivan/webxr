@@ -1,5 +1,9 @@
 # WebXR
 
+## Webpack
+
+All [name].ts files in ./src will be treated as entry scripts, resulting in [name].bundle.js files in ./dist.
+
 ## Typescript
 
 https://www.skypack.dev/view/aframe-typescript-class-components
