@@ -51,11 +51,6 @@ module.exports = {
                 'description': 'WebXR Page',
                 'viewport': 'width=device-width,initial-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no,minimal-ui,viewport-fit=cover'
             }
-        }),
-        new CopyWebpackPlugin({
-            patterns: [
-                { from: path.resolve(__dirname, './node_modules/aframe/dist/aframe.js'), to: "static" }
-            ]
         })
     ],
     output: {
