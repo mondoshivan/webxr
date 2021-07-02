@@ -16,7 +16,7 @@ export class SampleComponent extends BaseComponent<SampleComponentData, SampleSy
     };
 
     static multiple = true;
-    static dependencies = ["other-component"];
+    // static dependencies = ["other-component"];
 
     greeting: string = "";
     vector = new Vector3(0, 0, 0);

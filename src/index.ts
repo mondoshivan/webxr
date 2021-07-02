@@ -1,25 +1,16 @@
 import * as _ from 'lodash';
-import printMe from './print';
-import './styles/style.css';
-import Icon from './images/icon.png';
+// import './styles/style.css';
+// import Icon from './images/icon.png';
+import './scripts/color-class';
 
-function component() {
-    const element = document.createElement('div');
-    const btn = document.createElement('button');
-
-    element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-    element.classList.add('hello');
-
-    btn.innerHTML = 'Click me and check the console!';
-    btn.onclick = printMe;
-    element.appendChild(btn);
-
-    // Add the image to our existing div.
-    const myIcon = new Image();
-    myIcon.src = Icon;
-    element.appendChild(myIcon);
-
-    return element;
+function aScene() {
+    const aScene = document.createElement('a-scene');
+    const box = document.createElement('a-box');
+    box.setAttribute("position", "0 0 -3");
+    box.setAttribute("color", "red");
+    box.setAttribute("color-component", "");
+    aScene.appendChild(box);
+    return aScene;
 }
 
-document.body.appendChild(component());
+document.body.appendChild(aScene());

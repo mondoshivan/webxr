@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const srcDir = 'src';
 
 function getEntries() {
@@ -45,7 +46,17 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             title: 'WebXR',
+            'meta': {
+                'charset': 'utf-8',
+                'description': 'WebXR Page',
+                'viewport': 'width=device-width,initial-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no,minimal-ui,viewport-fit=cover'
+            }
         }),
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: path.resolve(__dirname, './node_modules/aframe/dist/aframe.js'), to: "static" }
+            ]
+        })
     ],
     output: {
         filename: '[name].bundle.js',
