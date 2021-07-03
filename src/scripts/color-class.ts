@@ -7,9 +7,9 @@ export interface ComponentData {
 
 @component("color-component")
 export class ColorClassComponent extends BaseComponent<ComponentData> {
-    static schema: Schema<ComponentData> = {
-        color: {type: "string", default: "black"}
-    };
+        static schema: Schema<ComponentData> = {
+            color: {type: "string", default: "yellow"}
+        };
 
     init(): void {
         this.el.setAttribute("color", this.data.color);

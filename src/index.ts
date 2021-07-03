@@ -1,16 +1,31 @@
 import * as _ from 'lodash';
 // import './styles/style.css';
-// import Icon from './images/icon.png';
+
+// elements
+import './elements/sun'
+
+// systems
+import './scripts/system'
+
+// components
 import './scripts/color-class';
 
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js').then(registration => {
+            console.log('SW registered: ', registration);
+        }).catch(registrationError => {
+            console.log('SW registration failed: ', registrationError);
+        });
+    });
+}
+
 function aScene() {
-    const aScene = document.createElement('a-scene');
-    const box = document.createElement('a-box');
-    box.setAttribute("position", "0 0 -3");
-    box.setAttribute("color", "red");
-    box.setAttribute("color-component", "");
-    aScene.appendChild(box);
-    return aScene;
+    return document.createElement('a-scene');
 }
 
 document.body.appendChild(aScene());
+
+
+
+
