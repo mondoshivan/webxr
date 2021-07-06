@@ -35,6 +35,7 @@ Adapt the value for the "servername" parameters in the /nginx/default.conf to ma
 
 ```sh
 npm install
+npm build
 ````
 
 ## Docker Deployment
