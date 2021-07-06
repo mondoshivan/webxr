@@ -31,11 +31,11 @@ sudo openssl dhparam -out ${PWD}/nginx/ssl/certs/dhparam.pem 2048
 
 Adapt the value for the "servername" parameters in the /nginx/default.conf to match the IP / host from the SSL certificate.
 
-## NPM Modules
+## NPM
 
 ```sh
 npm install
-npm build
+npm run build
 ````
 
 ## Docker Deployment
