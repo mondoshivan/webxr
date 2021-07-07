@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 
 // elements
 import './elements/sun'
+import './elements/wall'
 
 // systems
 import './scripts/system'
@@ -11,7 +12,7 @@ import './scripts/system'
 import './scripts/color-class';
 
 // assets
-import { Models }  from './models/models';
+import {Models, ModelType} from './models/models';
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -23,20 +24,26 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-function aAssets() {
+function aAssetsItem(id: string, src: string) : HTMLElement {
+    let assetElement = document.createElement('a-assets-item');
+    assetElement.setAttribute('id', id);
+    assetElement.setAttribute('src', src);
+    return assetElement;
+}
+
+function aAssets() : HTMLElement {
     const element = document.createElement('a-assets');
-    const assets = new Models();
-    for (let asset of assets.get()) {
-        let assetElement = document.createElement('a-assets-item');
-        assetElement.setAttribute('id', asset.id);
-        assetElement.setAttribute('src', asset.src);
-        element.appendChild(assetElement);
+    const models = new Models();
+    for (let model of models.get()) {
+        if (model.type === ModelType.GLTF && model.id && model.src) {
+            element.appendChild(aAssetsItem(model.id, model.src));
+        }
     }
     return element;
 
 }
 
-function aScene() {
+function aScene() : HTMLElement {
     const element = document.createElement('a-scene');
     element.appendChild(aAssets());
     return element;

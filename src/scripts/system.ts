@@ -1,7 +1,7 @@
 import {BaseSystem, system} from "aframe-typescript-class-components";
 import {Schema} from "aframe";
 import SkyImage from '../images/nasa-space.jpg';
-import { Models, ModelType  }  from '../models/models';
+import { Models, Model, ModelType  }  from '../models/models';
 
 export interface SystemData {
     color: string;
@@ -14,11 +14,37 @@ export class System extends BaseSystem<SystemData> {
         color: {type: "string", default: "blue"}
     };
 
-    init(): void {
-        console.log('init system');
+    createEntity(model: Model): HTMLElement {
+        const modelElement = document.createElement(`a-${model.type}`);
 
+        if (model.id)
+            modelElement.setAttribute('src', `#${model.id}`);
+
+        modelElement.object3D.position.set(model.position.y, model.position.y, model.position.y);
+        modelElement.object3D.rotation.set(model.rotation.x, model.rotation.y, model.rotation.z);
+
+        // if (model.geometry.primitive)
+            // modelElement.setAttribute('geometry', 'primitive', 'a-plane');
+
+        modelElement.setAttribute('geometry', 'width', '20');
+        modelElement.setAttribute('geometry', 'height', '5');
+
+        if (model.material?.color)
+            modelElement.setAttribute('material', 'color', 'yellow');
+
+        return modelElement;
+    }
+
+    addModels(): void {
         const el = this.el;
+        const models = new Models();
+        for (let model of models.get()) {
+            el.sceneEl?.appendChild(this.createEntity(model));
+        }
+    }
 
+    addPrimitives(): void {
+        const el = this.el;
 
         // sky image
         const skyImageEl = new Image();
@@ -47,17 +73,6 @@ export class System extends BaseSystem<SystemData> {
         const sun = document.createElement('a-sun');
         sun.object3D.position.set(0, 1, -3);
 
-        // models
-        const assets = new Models();
-        for (let model of assets.get()) {
-            if (model.type == ModelType.GLTF) {
-                const modelElement = document.createElement('a-gltf-model');
-                modelElement.setAttribute('src', `#${model.id}`);
-                modelElement.object3D.position.set(2, 0, -3);
-                el.sceneEl?.appendChild(modelElement);
-            }
-        }
-
         // moon
         const moon = document.createElement('a-sphere');
         moon.setAttribute('material', 'color: green');
@@ -68,6 +83,19 @@ export class System extends BaseSystem<SystemData> {
         sun.appendChild(moon);
         el.sceneEl?.appendChild(sun);
         el.sceneEl?.appendChild(aSky);
+    }
+
+    addWalls(): void {
+        const el = this.el;
+        const wall = document.createElement('a-wall');
+        wall.object3D.position.set(0, 1, -3);
+        el.sceneEl?.appendChild(wall);
+    }
+
+    init(): void {
+        this.addModels();
+        // this.addPrimitives();
+        // this.addWalls();
     }
 
 }
