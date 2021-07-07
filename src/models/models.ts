@@ -34,7 +34,8 @@ interface Config {
     position: Position,
     type: ModelType,
     rotation: Rotation,
-    material?: Material
+    material?: Material,
+    components?: string[]
 }
 
 export class Model {
@@ -46,6 +47,7 @@ export class Model {
     readonly rotation: Rotation;
     readonly geometry: Geometry;
     readonly material?: Material;
+    readonly components: string[];
 
     constructor(config: Config) {
         this.type = config.type;
@@ -55,6 +57,7 @@ export class Model {
         this.id = config.id;
         this.src = config.src;
         this.material = config.material;
+        this.components = config.components || [] ;
     }
 }
 
@@ -86,7 +89,8 @@ export class Models {
                 },
                 material: {
                     color: 'yellow'
-                }
+                },
+                components: ['color-component']
         }));
     }
 

@@ -32,6 +32,12 @@ export class System extends BaseSystem<SystemData> {
         if (model.material?.color)
             modelElement.setAttribute('material', 'color', 'yellow');
 
+        if (model.components) {
+            for (const component of model.components) {
+                modelElement.setAttribute(component, '');
+            }
+        }
+
         return modelElement;
     }
 
