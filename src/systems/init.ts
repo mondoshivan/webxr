@@ -1,5 +1,4 @@
 import {BaseSystem, system} from "aframe-typescript-class-components";
-import '../components/wall';
 import * as AFRAME from 'aframe';
 
 const {THREE} = AFRAME;
