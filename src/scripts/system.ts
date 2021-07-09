@@ -1,7 +1,9 @@
 import {BaseSystem, system} from "aframe-typescript-class-components";
 import {Schema} from "aframe";
 import SkyImage from '../images/nasa-space.jpg';
-import { Models, Model, ModelType  }  from '../models/models';
+import { Models, Model  }  from '../models/models';
+import * as AFRAME from 'aframe';
+const {THREE} = AFRAME;
 
 export interface SystemData {
     color: string;
@@ -10,27 +12,34 @@ export interface SystemData {
 @system("first-system")
 export class System extends BaseSystem<SystemData> {
 
-    static schema: Schema<SystemData> = {
-        color: {type: "string", default: "blue"}
-    };
+    // static schema: Schema<SystemData> = {
+    //     color: {type: "string", default: "blue"}
+    // };
 
     createEntity(model: Model): HTMLElement {
         const modelElement = document.createElement(`a-${model.type}`);
 
-        if (model.id)
-            modelElement.setAttribute('src', `#${model.id}`);
+        if (model.children.length > 0) {
+            for (const child of model.children) {
+                modelElement.appendChild(this.createEntity(child));
+            }
+        }
+
+        //if (model.id)
+        //    modelElement.setAttribute('src', `#${model.id}`);
+
+        modelElement.setAttribute('id', model.id);
 
         modelElement.object3D.position.set(model.position.y, model.position.y, model.position.y);
         modelElement.object3D.rotation.set(model.rotation.x, model.rotation.y, model.rotation.z);
 
-        // if (model.geometry.primitive)
-            // modelElement.setAttribute('geometry', 'primitive', 'a-plane');
-
-        modelElement.setAttribute('geometry', 'width', '20');
-        modelElement.setAttribute('geometry', 'height', '5');
+        modelElement.setAttribute('geometry', `width: ${model.geometry.width}; height: ${model.geometry.height}, depth: ${model.geometry.depth}`);
 
         if (model.material?.color)
-            modelElement.setAttribute('material', 'color', 'yellow');
+            modelElement.setAttribute('material', 'color', model.material.color);
+
+        if (model.material?.side)
+            modelElement.setAttribute('material', 'side', model.material.side);
 
         if (model.components) {
             for (const component of model.components) {
@@ -38,6 +47,7 @@ export class System extends BaseSystem<SystemData> {
             }
         }
 
+        model.setHtmlElement(modelElement);
         return modelElement;
     }
 
@@ -45,7 +55,8 @@ export class System extends BaseSystem<SystemData> {
         const el = this.el;
         const models = new Models();
         for (let model of models.get()) {
-            el.sceneEl?.appendChild(this.createEntity(model));
+            const modelElement = this.createEntity(model);
+            el.sceneEl?.appendChild(modelElement);
         }
     }
 
@@ -91,6 +102,22 @@ export class System extends BaseSystem<SystemData> {
         el.sceneEl?.appendChild(aSky);
     }
 
+    threeD() : void {
+        // Create geometry.
+        const geometry = new THREE.BoxBufferGeometry(1, 1, 1);
+
+        // Create material.
+        const material = new THREE.MeshStandardMaterial({color: 'green'});
+
+        // Create mesh.
+        const mesh = new THREE.Mesh(geometry, material);
+
+        mesh.position.set(-5, 0, -5);
+
+        // Set mesh on entity.
+        this.el.sceneEl?.setObject3D('hurz', mesh);
+    }
+
     addWalls(): void {
         const el = this.el;
         const wall = document.createElement('a-wall');
@@ -99,9 +126,10 @@ export class System extends BaseSystem<SystemData> {
     }
 
     init(): void {
-        this.addModels();
+        // this.addModels();
         // this.addPrimitives();
         // this.addWalls();
+        this.threeD();
     }
 
 }

@@ -1,18 +1,19 @@
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 // import './styles/style.css';
 
-// elements
-import './elements/sun'
-import './elements/wall'
+// assets
+// import {Models, ModelType} from './models/models';
 
-// systems
-import './scripts/system'
+// elements
+// import './elements/sun'
+// import './elements/wall'
 
 // components
-import './scripts/color-class';
+import './components/wall';
+import './components/room';
 
-// assets
-import {Models, ModelType} from './models/models';
+// systems
+import './systems/init'
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -33,12 +34,12 @@ function aAssetsItem(id: string, src: string) : HTMLElement {
 
 function aAssets() : HTMLElement {
     const element = document.createElement('a-assets');
-    const models = new Models();
-    for (let model of models.get()) {
-        if (model.type === ModelType.GLTF && model.id && model.src) {
-            element.appendChild(aAssetsItem(model.id, model.src));
-        }
-    }
+    // const models = new Models();
+    // for (let model of models.get()) {
+    //     if (model.type === ModelType.GLTF && model.src) {
+    //         element.appendChild(aAssetsItem(model.id, model.src));
+    //     }
+    // }
     return element;
 
 }
@@ -51,6 +52,28 @@ function aScene() : HTMLElement {
 
 document.body.appendChild(aScene());
 
-
-
-
+// import * as THREE from 'three';
+//
+// const scene = new THREE.Scene();
+// const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+//
+// const renderer = new THREE.WebGLRenderer();
+// renderer.setSize( window.innerWidth, window.innerHeight );
+// document.body.appendChild( renderer.domElement );
+//
+// const geometry = new THREE.BoxGeometry();
+// const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+// const cube = new THREE.Mesh( geometry, material );
+// scene.add( cube );
+//
+// camera.position.z = 5;
+//
+// function animate() {
+//     requestAnimationFrame( animate );
+//
+//     cube.rotation.x += 0.01;
+//     cube.rotation.y += 0.01;
+//
+//     renderer.render( scene, camera );
+// }
+// animate();
