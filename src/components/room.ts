@@ -24,61 +24,129 @@ namespace WebXR {
     }
 
     export interface ComponentData {
-        width: number;
-        height: number;
-        depth: number;
-        positionX: number;
-        positionY: number;
-        positionZ: number;
-        rotationX: number;
-        rotationY: number;
-        rotationZ: number;
-        wallStrength: number;
-        wallComponent: string;
+        geometry: {
+            width: number;
+            height: number;
+            depth: number;
+        }
+        rotation: {
+            x: number;
+            y: number;
+            z: number;
+        };
+        wall: {
+            strength: number,
+            component: string
+        };
+        visible: {
+            ceiling: boolean;
+            floor: boolean;
+            front: boolean;
+            back: boolean;
+            left: boolean;
+            right: boolean;
+        }
+        position: {
+            x: number;
+            y: number;
+            z: number;
+        };
     }
 
     @component("room-component")
     export class RoomClassComponent extends BaseComponent<ComponentData> {
         static schema: AFRAME.Schema<ComponentData> = {
-            width: {type: "number", default: 20},
-            height: {type: "number", default: 50},
-            depth: {type: "number", default: 10},
-            positionX: {type: "number", default: 20},
-            positionY: {type: "number", default: 0},
-            positionZ: {type: "number", default: -50},
-            rotationX: {type: "number", default: 0},
-            rotationY: {type: "number", default: 0},
-            rotationZ: {type: "number", default: 0},
-            wallStrength: {type: "number", default: 2},
-            wallComponent: {type: "string", default: "wall-component"}
+            geometry: {type: "map",  default: {width: 20, height: 20, depth: 20}},
+            wall: {type: "map", default: {strength: 1, component: 'wall-component'}},
+            visible: {type: "map", default: {ceiling: true, floor: true, front: true, back: true, left: true, right: true}},
+            position: {type: "map", default: { x: 0, y: 0, z: -20}},
+            rotation: {type: "map", default: { x: 0, y: 0, z: 0}}
         };
 
         init(): void {
             const el = this.el;
             const data = this.data;
 
-            el.appendChild(this.buildWall(this.floorData()));
-            el.appendChild(this.buildWall(this.rightWallData()));
-            el.appendChild(this.buildWall(this.leftWallData()));
-            el.appendChild(this.buildWall(this.backWallData()));
+            if (data.visible.floor)
+                el.appendChild(this.buildWall(this.floorData()));
 
-            el.object3D.position.set(data.positionX, data.positionY, data.positionZ);
+            if (data.visible.right)
+                el.appendChild(this.buildWall(this.rightWallData()));
+
+            if (data.visible.left)
+                el.appendChild(this.buildWall(this.leftWallData()));
+
+            if (data.visible.back)
+                el.appendChild(this.buildWall(this.backWallData()));
+
+            if (data.visible.front)
+                el.appendChild(this.buildWall(this.frontWallData()));
+
+            if (data.visible.ceiling)
+                el.appendChild(this.buildWall(this.ceilingData()));
+
+            el.object3D.position.set(data.position.x, data.position.y, data.position.z);
             el.object3D.rotation.set(
-                THREE.MathUtils.degToRad(data.rotationX),
-                THREE.MathUtils.degToRad(data.rotationY),
-                THREE.MathUtils.degToRad(data.rotationZ)
+                THREE.MathUtils.degToRad(data.rotation.x),
+                THREE.MathUtils.degToRad(data.rotation.y),
+                THREE.MathUtils.degToRad(data.rotation.z)
             );
 
         }
+
+        ceilingData(): WallData {
+            const data = this.data;
+
+            return {
+                geometry: {
+                    width: data.geometry.width,
+                    height: data.wall.strength,
+                    depth: data.geometry.depth
+                },
+                position: {
+                    x: 0,
+                    y: data.geometry.height - data.wall.strength,
+                    z: 0
+                },
+                rotation: {
+                    x: 0,
+                    y: 0,
+                    z: 0
+                }
+            };
+        }
+
+        frontWallData(): WallData {
+            const data = this.data;
+
+            return {
+                geometry: {
+                    width: data.geometry.width + data.wall.strength * 2,
+                    height: data.geometry.height,
+                    depth: data.wall.strength
+                },
+                position: {
+                    x: 0,
+                    y: data.geometry.height * 0.5 - data.wall.strength * 0.5,
+                    z: data.geometry.depth * 0.5 + data.wall.strength * 0.5
+                },
+                rotation: {
+                    x: 0,
+                    y: 0,
+                    z: 0
+                }
+            };
+        }
+
 
         floorData(): WallData {
             const data = this.data;
 
             return {
                 geometry: {
-                    width: data.width,
-                    height: data.wallStrength,
-                    depth: data.depth
+                    width: data.geometry.width,
+                    height: data.wall.strength,
+                    depth: data.geometry.depth
                 },
                 position: {
                     x: 0,
@@ -98,13 +166,13 @@ namespace WebXR {
 
             return {
                 geometry: {
-                    width: data.wallStrength,
-                    height: data.height,
-                    depth: data.depth
+                    width: data.wall.strength,
+                    height: data.geometry.height,
+                    depth: data.geometry.depth
                 },
                 position: {
-                    x: data.width * 0.5 + data.wallStrength * 0.5,
-                    y: data.height * 0.5 - data.wallStrength * 0.5,
+                    x: data.geometry.width * 0.5 + data.wall.strength * 0.5,
+                    y: data.geometry.height * 0.5 - data.wall.strength * 0.5,
                     z: 0
                 },
                 rotation: {
@@ -120,13 +188,13 @@ namespace WebXR {
 
             return {
                 geometry: {
-                    width: data.wallStrength,
-                    height: data.height,
-                    depth: data.depth
+                    width: data.wall.strength,
+                    height: data.geometry.height,
+                    depth: data.geometry.depth
                 },
                 position: {
-                    x: (data.width * 0.5 + data.wallStrength * 0.5) * -1,
-                    y: data.height * 0.5 - data.wallStrength * 0.5,
+                    x: (data.geometry.width * 0.5 + data.wall.strength * 0.5) * -1,
+                    y: data.geometry.height * 0.5 - data.wall.strength * 0.5,
                     z: 0
                 },
                 rotation: {
@@ -142,14 +210,14 @@ namespace WebXR {
 
             return {
                 geometry: {
-                    width: data.width + data.wallStrength * 2,
-                    height: data.height,
-                    depth: data.wallStrength
+                    width: data.geometry.width + data.wall.strength* 2,
+                    height: data.geometry.height,
+                    depth: data.wall.strength
                 },
                 position: {
                     x: 0,
-                    y: data.height * 0.5 - data.wallStrength * 0.5,
-                    z: (data.depth * 0.5 + data.wallStrength * 0.5) * -1
+                    y: data.geometry.height * 0.5 - data.wall.strength * 0.5,
+                    z: (data.geometry.depth * 0.5 + data.wall.strength * 0.5) * -1
                 },
                 rotation: {
                     x: 0,
@@ -162,7 +230,7 @@ namespace WebXR {
         buildWall(wall: WallData): HTMLElement {
             const data = this.data;
             const modelElement = document.createElement(`a-entity`);
-            modelElement.setAttribute(data.wallComponent, {
+            modelElement.setAttribute(data.wall.component, {
                 color: 'green',
                 rotationX: wall.rotation.x,
                 rotationY: wall.rotation.y,

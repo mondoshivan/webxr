@@ -25,11 +25,11 @@ namespace WebXR {
             rotationY: {type: "number", default: 0},
             rotationZ: {type: "number", default: 0},
             positionX: {type: "number", default: 0},
-            positionY: {type: "number", default: 0},
+            positionY: {type: "number", default: -50},
             positionZ: {type: "number", default: 0},
             width: {type: "number", default: 20},
             height: {type: "number", default: 10},
-            depth: {type: "number", default: 1},
+            depth: {type: "number", default: 1}
         };
 
         init(): void {
